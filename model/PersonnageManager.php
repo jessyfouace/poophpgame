@@ -17,10 +17,9 @@ class PersonnageManager
     public function addPersonnage(Personnage $perso)
     {
         $addBdd = $this->_bdd->prepare('INSERT INTO personages(names, damage) VALUES(:names, :damage)');
-        $addBdd->execute(array(
-            'names' => $perso->getNames(),
-            'damage' => $perso->getDamage()
-        ));
+        $addBdd->bindValue(':names', $perso->getNames(), PDO::PARAM_STR);
+        $addBdd->bindValue(':damage', $perso->getDamage(), PDO::PARAM_INT);
+        $addBdd->execute();
     }
 
     /**
@@ -45,9 +44,9 @@ class PersonnageManager
         $perso;
 
         $takeBdd = $this->_bdd->prepare('SELECT * FROM personages WHERE id = :id');
-        $takeBdd->execute(array(
-            'id' => $id
-        ));
+        $takeBdd->bindValue(':id', $id, PDO::PARAM_INT);
+        $takeBdd->execute();
+
         $takeAllBdd = $takeBdd->fetchAll();
         foreach ($takeAllBdd as $personnages) {
             $perso = new Personnage($personnages);
@@ -103,10 +102,9 @@ class PersonnageManager
     public function update(Personnage $perso)
     {
         $updateBdd = $this->_bdd->prepare('UPDATE personages SET damage = :damage WHERE id = :id');
-        $updateBdd->execute(array(
-            'id' => $perso->getId(),
-            'damage' => $perso->getDamage()
-        ));
+        $updateBdd->bindValue(':id', $perso->getId(), PDO::PARAM_STR);
+        $updateBdd->bindValue(':damage', $perso->getDamage(), PDO::PARAM_STR);
+        $updateBdd->execute();
     }
 
     /**

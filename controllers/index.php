@@ -15,10 +15,12 @@ loadClass('model/PersonnageManager', $bdd);
 
 $manager = new PersonnageManager($bdd);
 
+
 if (isset($_GET['start']) && !empty($_POST['name'])) {
+    $secureName = htmlspecialchars($_POST['name']);
     if ($_GET['start'] == 'loading') {
         $perso = new Personnage([
-            'names' => $_POST['name'],
+            'names' => $secureName,
             'damage' => 0
             ]);
         $manager->addPersonnage($perso);
